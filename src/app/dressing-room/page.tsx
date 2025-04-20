@@ -29,7 +29,15 @@ export default function DressingRoom() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-pink-50 p-8">
+    <main 
+      className="min-h-screen bg-gradient-to-b from-indigo-100 via-violet-200 to-white p-8"
+      style={{
+        backgroundImage: 'url(/dream-bg.png)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -93,6 +101,6 @@ export default function DressingRoom() {
           Wearing: {getOutfitDescription()}
         </div>
       </motion.div>
-    </div>
+    </main>
   );
 } 

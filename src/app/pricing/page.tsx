@@ -4,7 +4,15 @@ import { motion } from 'framer-motion';
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-purple-50 p-8">
+    <main 
+      className="min-h-screen bg-gradient-to-b from-indigo-100 via-violet-200 to-white p-8"
+      style={{
+        backgroundImage: 'url(/dream-bg.png)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,6 +71,6 @@ export default function PricingPage() {
 
         {/* TODO: Connect to real billing logic in Round Two. */}
       </motion.div>
-    </div>
+    </main>
   );
 } 

@@ -13,7 +13,15 @@ export default function ProfilePage() {
   const [showFriendBox, setShowFriendBox] = useState(false); // Future use
 
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen pt-10 px-4 bg-gradient-to-b from-indigo-100 to-white">
+    <main 
+      className="flex flex-col items-center justify-start min-h-screen pt-10 px-4 bg-gradient-to-b from-indigo-100 via-violet-200 to-white"
+      style={{
+        backgroundImage: 'url(/dream-bg.png)',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
       {/* Avatar Section */}
       <motion.div 
         className="mb-4"
