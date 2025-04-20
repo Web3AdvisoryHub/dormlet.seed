@@ -60,7 +60,7 @@ export default function ProfilePage() {
             className="mt-6"
           >
             <div className="bg-white/60 rounded-xl shadow-lg p-4 backdrop-blur-sm">
-              {/* TODO: In future releases, DracoBox becomes a portal to Dormlet Dream. */}
+              {/* TODO: In future releases, DracoBox becomes a portal to Dormlit Dream. */}
               <DracoBox />
             </div>
           </motion.div>
