@@ -1,6 +1,19 @@
 'use client';
 
 import Link from 'next/link';
+import DracoBox from '@/components/DracoBox';
+import { AvatarStyle } from '@/types/avatar';
+
+// Mock data for DracoBox
+const mockAvatarStyle: AvatarStyle = {
+  top: { color: '#8B5CF6' },
+  pants: { color: '#4F46E5' },
+  shoes: { color: '#7C3AED' },
+  accessories: [
+    { id: '1', color: '#F472B6' },
+    { id: '2', color: '#60A5FA' }
+  ]
+};
 
 export default function HomePage() {
   return (
@@ -23,10 +36,16 @@ export default function HomePage() {
         <a href="#" className="bg-green-400 text-white py-2 rounded-lg text-center hover:bg-green-500 transition">Support Me</a>
       </div>
 
-      {/* DracoBox Preview */}
-      <div className="w-full max-w-md bg-white border-2 border-dashed border-purple-300 rounded-xl p-4 shadow-md">
-        <h2 className="text-lg font-semibold text-purple-700 mb-2">My DracoBox</h2>
-        <p className="text-sm text-gray-500">Click to open my magical box of vibes and items!</p>
+      {/* DracoBox */}
+      <div className="w-full max-w-md mb-8">
+        <DracoBox
+          avatarStyle={mockAvatarStyle}
+          username="Cosmic Seed"
+          bio="Dreaming, building, vibing."
+          isVisible={true}
+          isPremium={false}
+          selectedBackground="cosmic-glow"
+        />
       </div>
 
       {/* Trial Button */}
