@@ -51,13 +51,18 @@ export default function ProfilePage() {
           </motion.div>
         )}
         
+        {/* DracoBox Container */}
         {showDracoBox && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
+            className="mt-6"
           >
-            <DracoBox />
+            <div className="bg-white/60 rounded-xl shadow-lg p-4 backdrop-blur-sm">
+              {/* TODO: In future releases, DracoBox becomes a portal to Dormlet Dream. */}
+              <DracoBox />
+            </div>
           </motion.div>
         )}
         
