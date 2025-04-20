@@ -14,11 +14,8 @@ interface DracoBoxProps {
   onRevealComplete?: () => void;
 }
 
-const revealMessages = [
-  "A new star has joined the constellation.",
-  "Their Draco Box has been unlocked—take a peek inside.",
-  "Some stars stay quiet, but this one just shimmered into view."
-];
+// Use a consistent message instead of random selection
+const revealMessage = "A new star has joined the constellation.";
 
 export default function DracoBox({ 
   avatarStyle, 
@@ -29,8 +26,6 @@ export default function DracoBox({
   selectedBackground = 'default',
   onRevealComplete 
 }: DracoBoxProps) {
-  const randomMessage = revealMessages[Math.floor(Math.random() * revealMessages.length)];
-
   // Determine the actual background theme to use
   const getBackgroundTheme = () => {
     if (selectedBackground !== 'default') {
@@ -68,7 +63,7 @@ export default function DracoBox({
               onAnimationComplete={onRevealComplete}
             >
               <p className="text-sm text-primary/80 font-light italic">
-                {randomMessage}
+                {revealMessage}
               </p>
             </motion.div>
 
