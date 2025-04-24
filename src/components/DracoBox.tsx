@@ -88,7 +88,7 @@ export default function DracoBox({
               </p>
             </motion.div>
 
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-6">
               <motion.div 
                 className="w-32 h-32 rounded-full overflow-hidden"
                 initial={{ scale: 0 }}

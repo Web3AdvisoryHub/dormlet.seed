@@ -5,11 +5,54 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createClient } from '@supabase/supabase-js';
 import { OptimizedEggImage } from './OptimizedEggImage';
 
-// Initialize Supabase client
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Safe environment variable access with fallbacks and debugging
+const getEnvVar = (key: string, fallback: string): string => {
+  // Debug logging
+  console.log(`[DEBUG] Checking ${key}:`, {
+    processExists: typeof process !== 'undefined',
+    envExists: typeof process !== 'undefined' && !!process.env,
+    value: typeof process !== 'undefined' && process.env ? process.env[key] : 'undefined'
+  });
+
+  if (typeof process === 'undefined' || !process.env) {
+    console.warn(`[WARN] process.env is not available, using fallback for ${key}`);
+    return fallback;
+  }
+
+  const value = process.env[key];
+  if (!value) {
+    console.warn(`[WARN] ${key} is not set, using fallback`);
+    return fallback;
+  }
+
+  return value;
+};
+
+// Initialize Supabase client with better error handling
+let supabase;
+try {
+  const supabaseUrl = getEnvVar('NEXT_PUBLIC_SUPABASE_URL', 'https://your-default-url.supabase.co');
+  const supabaseKey = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'your-anon-key');
+
+  if (!supabaseUrl || supabaseUrl === 'https://your-default-url.supabase.co') {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL is required. Please set it in Replit Secrets or .env file.');
+  }
+
+  if (!supabaseKey || supabaseKey === 'your-anon-key') {
+    throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY is required. Please set it in Replit Secrets or .env file.');
+  }
+
+  supabase = createClient(supabaseUrl, supabaseKey);
+  console.log('[DEBUG] Supabase client initialized successfully');
+} catch (error) {
+  console.error('[ERROR] Failed to initialize Supabase client:', error);
+  // Create a mock client that will throw errors when used
+  supabase = {
+    from: () => {
+      throw new Error('Supabase client not initialized. Please check your environment variables.');
+    }
+  };
+}
 
 // IPFS Gateway URL - can be changed based on preferred gateway
 const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
