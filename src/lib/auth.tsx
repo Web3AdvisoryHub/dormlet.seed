@@ -1,35 +1,39 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  User,
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  User as FirebaseUser,
   sendPasswordResetEmail,
   updateProfile,
   sendEmailVerification,
   applyActionCode,
-  checkActionCode
-} from 'firebase/auth';
-import { auth } from './firebase';
+  checkActionCode,
+} from "@firebase/auth";
+import { auth } from "./firebase";
 
 interface AuthContextType {
-  user: User | null;
+  user: FirebaseUser | null;
   loading: boolean;
-  signUp: (email: string, password: string, username: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
-  logOut: () => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   sendVerificationEmail: () => Promise<void>;
   verifyEmail: (code: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,53 +42,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
-  const signUp = async (email: string, password: string, username: string) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: username });
-      await sendEmailVerification(userCredential.user);
-    } catch (error) {
-      console.error('Error signing up:', error);
-      throw error;
-    }
-  };
-
   const signIn = async (email: string, password: string) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      console.error('Error signing in:', error);
-      throw error;
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Error signing out:', error);
-      throw error;
-    }
+  const signUp = async (email: string, password: string) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = async () => {
+    await signOut(auth);
   };
 
   const resetPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error) {
-      console.error('Error resetting password:', error);
+      console.error("Error resetting password:", error);
       throw error;
     }
   };
 
   const sendVerificationEmail = async () => {
-    if (!user) throw new Error('No user logged in');
+    if (!user) throw new Error("No user logged in");
     try {
       await sendEmailVerification(user);
     } catch (error) {
-      console.error('Error sending verification email:', error);
+      console.error("Error sending verification email:", error);
       throw error;
     }
   };
@@ -93,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await applyActionCode(auth, code);
     } catch (error) {
-      console.error('Error verifying email:', error);
+      console.error("Error verifying email:", error);
       throw error;
     }
   };
@@ -101,12 +88,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     loading,
-    signUp,
     signIn,
-    logOut,
+    signUp,
+    logout,
     resetPassword,
     sendVerificationEmail,
-    verifyEmail
+    verifyEmail,
   };
 
   return (
@@ -114,12 +101,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {!loading && children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-} 
+};
